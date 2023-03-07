@@ -1,0 +1,12 @@
+.root {
+  width: 100vw;
+  height: 100vh;
+}
+
+.root div {
+  margin-top: 2rem;
+}
+
+.link {
+  padding: .25rem 5rem !important;
+}
