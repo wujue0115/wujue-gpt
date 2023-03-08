@@ -1,4 +1,4 @@
-export interface RouterType {
+export interface RouteType {
   path: string;
   element: JSX.Element;
   errorElement?: JSX.Element;

@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import { RouterType } from "../types/router.types";
+import { RouteType } from "../types/route.types";
 import Root from "./Root";
 import Chat from "./Chat";
 
-const routes: RouterType[] = [
+const routes: RouteType[] = [
   {
     path: "/",
     element: <Root />,
