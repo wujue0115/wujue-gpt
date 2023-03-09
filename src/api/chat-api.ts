@@ -1,7 +1,20 @@
 import { MessageType } from "../types/message.types";
 
+async function* streamToAsyncIterator(stream: ReadableStream<Uint8Array>): AsyncGenerator<Uint8Array> {
+  const reader = stream.getReader();
 
-export default async function(messages: MessageType[]): Promise<MessageType | void> {
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      yield value;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export default async function(messages: MessageType[]): Promise<AsyncGenerator<Uint8Array> | void> {
   try {
     const url = "https://api.openai.com/v1/chat/completions";
     const response = await fetch(url, {
@@ -13,12 +26,14 @@ export default async function(messages: MessageType[]): Promise<MessageType | vo
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: messages,
-        stream: false,
+        stream: true,
       })
     });
-  
-    const data = await response.json();
-    return data.choices[0].message;
+
+    const stream = response.body;
+    if (!stream) throw new Error("stream is null");
+
+    return streamToAsyncIterator(stream);
   } catch (error) {
     console.error(error);
   }
