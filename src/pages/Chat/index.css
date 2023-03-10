@@ -1,13 +1,16 @@
 .chat {
   width: 100vw;
   height: 100vh;
+  padding: 2rem 0;
+  background-color: #333;
 }
 
 .wrapper {
   width: 60%;
   height: 100%;
-  padding: 2rem 0;
   justify-content: space-evenly;
+  outline: 1px solid #ffffffaa;
+  border-radius: 5px;
 }
 
 .back {
@@ -19,27 +22,91 @@
 .chat-pane {
   width: 100%;
   height: 100%;
-  margin-bottom: 2rem;
+  overflow: scroll;
+  padding: 1rem;
   background-color: rgb(51, 59, 102);
-  /* border: 1px solid #fff; */
   border-radius: 5px;
+}
+
+.user-pane,
+.assistant-pane {
+  position: relative;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.user-pane {
+  flex-direction: row-reverse;
+}
+
+.content-pane {
+  width: 80%;
+  padding: .5rem;
+  border-radius: 5px;
+  background-color: #fff;
+  color: var(--primary-color);
+  line-height: 1.5rem;
+}
+
+.content-pane::before {
+  content: "";
+  position: absolute;
+  border-style: solid;
+  border-width: .5rem;
+}
+
+.user-pane .content-pane::before {
+  right: calc(-1rem);
+  top: calc(.5rem + .25rem);
+  border-color: transparent;
+  border-left-color: #fff;
+}
+
+.assistant-pane .content-pane::before {
+  left: calc(-1rem);
+  top: calc(.5rem + .25rem);
+  border-color: transparent;
+  border-right-color: #fff;
 }
 
 .input-pane {
   width: 100%;
-  height: 2rem;
+  padding: 1rem;
   justify-content: space-between;
+  background-color: var(--primary-color);
+  border-top: 1px solid #ffffffaa;
 }
 
 .user-input {
   width: 100%;
+  height: 2rem;
+  max-height: 8rem;
+  overflow: scroll;
+  padding: .5rem;
   font-size: 1rem;
+  background-color: rgb(51, 59, 102);
+  border-radius: 5px;
+  color: #fff;  
+
+  /* clear textarea style */
+  border: none;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none; /*remove the resize handle on the bottom right*/
+}
+
+.user-input::placeholder {
+  color: #aaa;
+}
+
+.user-input:hover {
+  outline: 1px solid #ffffffaa;
 }
 
 .input-pane .btn {
-  height: 100%;
+  height: 2rem;
   margin-left: 1rem;
   padding: .25rem 2rem !important;
 }
-
-

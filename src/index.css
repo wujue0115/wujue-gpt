@@ -22,10 +22,10 @@ a {
   color: var(--primary-color);
 }
 a:hover {
-  border: 1px solid #fff;
+  outline: 1px solid #fff;
 }
 a:active {
-  border: none;
+  outline: none;
   opacity: .8;
 }
 
@@ -36,11 +36,11 @@ a:active {
   color: var(--primary-color);
 }
 .btn:hover {
-  border: 1px solid #fff;
+  outline: 1px solid #fff;
   cursor:pointer;
 }
 .btn:active {
-  border: none;
+  outline: none;
   opacity: .8;
 }
 
