@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { MessageType } from "../../types/message.types";
 import chatApi from "../../api/chat-api";
 import "./index.css";
+import Contents from "./contents";
 
 function parseChunkToContents(chunk: Uint8Array): string[] {
   const chunkData: string = new TextDecoder().decode(chunk);
@@ -70,24 +71,7 @@ const Chat = () => {
       <div className="wrapper flex flex-column">
         <Link to="/" className="back btn font-size-4">Back</Link>
         <div className="chat-pane" ref={chatPaneRef}>
-          {messages.map((message, mIndex) => {
-            return message.content
-              .split("\n")
-              .filter(str => str !== "")
-              .map((content, cIndex) => {
-                return (
-                  <div 
-                    key={message.role + mIndex + cIndex}
-                    className={"flex  " + (message.role === "user" ? "user-pane" : "assistant-pane")}
-                  >
-                    <div className="content-pane">
-                      {/* <h3>{message.role}</h3> */}
-                      <p>{content}</p>
-                    </div>
-                  </div>
-                )
-              })
-          })}
+          <Contents messages={messages} />
         </div>
         <div className="input-pane flex">
           <textarea 
