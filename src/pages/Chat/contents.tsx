@@ -1,8 +1,10 @@
+import { memo } from "react";
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { a11yDark, github } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { MessageType } from "../../types/message.types";
 
-const Contents: React.FC<{messages: MessageType[]}> = ({ messages }) => {
+// Use memo to store messages data and only re-render when the messages data is updated.
+const Contents: React.FC<{messages: MessageType[]}> = memo(({ messages }) => {
   // Combine the code string into a single entity.
   const refactorMessages = (messages: MessageType[]) => {
     const newMessages = [];
@@ -56,6 +58,6 @@ const Contents: React.FC<{messages: MessageType[]}> = ({ messages }) => {
       })}
     </div>
   )
-}
+});
 
 export default Contents;

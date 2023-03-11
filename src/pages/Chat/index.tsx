@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { Link } from "react-router-dom";
 import { MessageType } from "../../types/message.types";
 import chatApi from "../../api/chat-api";
@@ -9,8 +9,7 @@ import { parseChunkToContents, autoScrollDown } from "./utils";
 const Chat = () => {
   const [content, setContent] = useState<string>("");
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const [hasUserWheel, setHasUserWheel] = useState<boolean>(false);
-  const [userWheelDeltaY, setUserWheelDeltaY] = useState<number>(0);
+  const [userWheelInfo, setUserWheelInfo] = useState<{ hasUserWheel: boolean, deltaY: number }>({ hasUserWheel: false, deltaY: 0 });
   const chatPaneRef = useRef<HTMLInputElement>(null);
 
   const submitMessages = async () => {
@@ -19,14 +18,13 @@ const Chat = () => {
       return;
     }
 
+    const requestMessages = [...messages, { role: "user", content }];
+    setContent("");
+    setMessages(requestMessages);
+    setUserWheelInfo({ hasUserWheel: false, deltaY: 0 });
+
     try {
-      const requestMessages = [...messages, { role: "user", content }];
-      setContent("");
-      setMessages(requestMessages);
-      setHasUserWheel(false);
-
       const asyncStream = await chatApi(requestMessages);
-
       if (!asyncStream) throw new Error("stream is null");
       
       const newMessages = [...requestMessages, { role: "assistant", content: "" }]
@@ -39,26 +37,26 @@ const Chat = () => {
     } catch (error) {
       console.error(error)
     }
-  } 
-  
-  const updateScroll = () => {
-    if (!chatPaneRef.current) return;
-    autoScrollDown(chatPaneRef.current, hasUserWheel, userWheelDeltaY);
   }
-
+  
   useEffect(() => {
-    updateScroll();
+    updateChatPaneScroll();
   }, [messages]);
 
-  const handleChatPaneWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    setUserWheelDeltaY(event.deltaY);
-    setHasUserWheel(true); 
+  const updateChatPaneScroll = () => {
+    if (!chatPaneRef.current) return;
+    autoScrollDown(chatPaneRef.current, userWheelInfo.hasUserWheel, userWheelInfo.deltaY);
+  }
+
+  const handleChatPaneWheel = ({ deltaX, deltaY }: React.WheelEvent<HTMLDivElement>) => {
+    if (deltaX) return;
+    setUserWheelInfo({ hasUserWheel: true, deltaY });
   }
 
   const handleContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    event.target.style.height = "0px";
-    event.target.style.height = event.target.scrollHeight + "px";
-    setContent(event.target.value);
+    const textarea = event.target;
+    textarea.style.height = textarea.scrollHeight + "px";
+    setContent(textarea.value);
   }
 
   return (
@@ -79,6 +77,6 @@ const Chat = () => {
       </div>
     </div>
   )
-}
+};
 
 export default Chat;
