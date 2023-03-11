@@ -42,7 +42,7 @@ const Contents: React.FC<{messages: MessageType[]}> = ({ messages }) => {
                   <SyntaxHighlighter 
                     language="javascript" 
                     style={a11yDark} 
-                    showLineNumbers 
+                    showLineNumbers
                     customStyle={{ borderRadius: "5px" }}
                   >
                     {content.replace("$codeblock", "").trim()}
