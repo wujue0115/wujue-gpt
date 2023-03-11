@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { MessageType } from "../../types/message.types";
 import chatApi from "../../api/chat-api";
@@ -7,19 +7,19 @@ import Contents from "./contents";
 import { parseChunkToContents, autoScrollDown } from "./utils";
 
 const Chat = () => {
-  const [content, setContent] = useState<string>("");
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [userWheelInfo, setUserWheelInfo] = useState<{ hasUserWheel: boolean, deltaY: number }>({ hasUserWheel: false, deltaY: 0 });
   const chatPaneRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const submitMessages = async () => {
-    if (!content) {
+    const userQuestion = textareaRef.current!.value;
+    if (!userQuestion) {
       alert("There is no text in the input box!");
       return;
     }
 
-    const requestMessages = [...messages, { role: "user", content }];
-    setContent("");
+    const requestMessages = [...messages, { role: "user", content: userQuestion }];
     setMessages(requestMessages);
     setUserWheelInfo({ hasUserWheel: false, deltaY: 0 });
 
@@ -53,10 +53,9 @@ const Chat = () => {
     setUserWheelInfo({ hasUserWheel: true, deltaY });
   }
 
-  const handleContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleContentInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = event.target;
     textarea.style.height = textarea.scrollHeight + "px";
-    setContent(textarea.value);
   }
 
   return (
@@ -69,9 +68,10 @@ const Chat = () => {
         <div className="input-pane flex">
           <textarea 
             className="user-input" 
+            ref={textareaRef}
+            onInput={handleContentInput} 
             placeholder="Please type out your questions..."
-            value={content} 
-            onChange={handleContentChange} />
+          ></textarea>
           <div className="btn font-size-4" onClick={submitMessages}>Enter</div>
         </div>
       </div>
