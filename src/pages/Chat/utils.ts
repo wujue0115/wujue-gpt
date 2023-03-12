@@ -13,7 +13,9 @@ export function parseChunkToContents(chunk: Uint8Array): string[] {
 
   const contents = dataArray.map(data => {
     const jsonData = data.includes("[DONE]") ? null : JSON.parse(data);
-    return jsonData ? jsonData.choices[0].delta.content || "" : "";
+    if (!jsonData) return "";
+    if (jsonData?.error) return jsonData.error.message;
+    return jsonData?.choices[0].delta.content;
   });
   return contents;
 }
