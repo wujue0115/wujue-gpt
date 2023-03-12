@@ -9,11 +9,15 @@ import { parseChunkToContents, autoScrollDown } from "./utils";
 const Chat = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [userWheelInfo, setUserWheelInfo] = useState<{ hasUserWheel: boolean, deltaY: number }>({ hasUserWheel: false, deltaY: 0 });
+  const [menuActive, setMenuActive] = useState<boolean>(false);
   const chatPaneRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const submitMessages = async () => {
     const userQuestion = textareaRef.current!.value;
+    textareaRef.current!.value = "";
+    textareaRef.current!.style.height = "0";
+    textareaRef.current!.style.height = textareaRef.current!.scrollHeight + "px";
     if (!userQuestion) {
       alert("There is no text in the input box!");
       return;
@@ -55,7 +59,13 @@ const Chat = () => {
 
   const handleContentInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = event.target;
+    textarea.style.height = "0";
     textarea.style.height = textarea.scrollHeight + "px";
+  }
+
+  const handleResetClick = () => {
+    setMessages([]);
+    setMenuActive(false);
   }
 
   return (
@@ -65,7 +75,22 @@ const Chat = () => {
         <div className="chat-pane" ref={chatPaneRef} onWheel={handleChatPaneWheel}>
           <Contents messages={messages} />
         </div>
+        {menuActive && 
+          <div className="menu-pane">
+            <div className="btn font-size-4" onClick={handleResetClick}>Reset</div>
+          </div>
+        }
         <div className="input-pane flex">
+          <div className="menu flex flex-center-center">
+            <div 
+              className={"hamburger flex flex-column " + (menuActive ? "active" : "") } 
+              onClick={() => { setMenuActive(!menuActive) }}
+            >
+              <div className="hamburger-line"></div>
+              <div className="hamburger-line"></div>
+              <div className="hamburger-line"></div>
+            </div>
+          </div>
           <textarea 
             className="user-input" 
             ref={textareaRef}
