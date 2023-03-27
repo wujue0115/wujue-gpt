@@ -3,6 +3,9 @@
 ## Description
 wujue-gpt 是一個可以快速部署於 Local 上的簡易 chat-gpt 網頁
 
+## Live demo
+[Wujue GPT](https://wujue0115.github.io/wujue-gpt/#/)
+
 ## Visuals
 - 聊天室頁面樣式
 
