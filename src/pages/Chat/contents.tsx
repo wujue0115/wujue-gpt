@@ -13,7 +13,7 @@ const Contents: React.FC<{messages: MessageType[]}> = memo(({ messages }) => {
       const newContents = [];
       for (let i = 0; i < contents.length; ++i) {
         if (contents[i].startsWith("```")) {
-          let codeContent = "$codeblock";
+          let codeContent = "$codeblock[language]" + contents[i].substring(3) + "[language]";
           while (++i < contents.length && contents[i] !== "```") {
             codeContent += "\n" + contents[i];
           }
@@ -42,12 +42,12 @@ const Contents: React.FC<{messages: MessageType[]}> = memo(({ messages }) => {
               <div className="content-pane">
                 {content.startsWith("$codeblock") ?
                   <SyntaxHighlighter 
-                    language="javascript" 
+                    language={content.split("[language]")[1]} 
                     style={a11yDark} 
                     showLineNumbers
                     customStyle={{ borderRadius: "5px" }}
                   >
-                    {content.replace("$codeblock", "").trim()}
+                    {content.split("[language]")[2].trim()}
                   </SyntaxHighlighter> :
                   <p>{content}</p>
                 }
