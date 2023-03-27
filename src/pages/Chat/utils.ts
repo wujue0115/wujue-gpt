@@ -16,7 +16,8 @@ export function parseChunkToContents(chunk: Uint8Array): string[] {
     if (!jsonData) return "";
     if (jsonData?.error) return jsonData.error.message;
     return jsonData?.choices[0].delta.content;
-  });
+  }).filter(content => content);
+  
   return contents;
 }
 
