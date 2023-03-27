@@ -28,6 +28,10 @@
   border-radius: 5px;
 }
 
+.chat-pane::-webkit-scrollbar {
+  display: none;
+}
+
 .user-pane,
 .assistant-pane {
   position: relative;
@@ -99,6 +103,10 @@
   box-shadow: none;
   /* remove the resize handle on the bottom right */
   resize: none; 
+}
+
+.user-input::-webkit-scrollbar {
+  display: none;
 }
 
 .user-input::placeholder {
