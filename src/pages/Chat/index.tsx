@@ -39,7 +39,11 @@ const Chat = () => {
         setMessages([...newMessages.slice(0, -1), lastMessage]);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
+      setMessages([...requestMessages, { 
+        role: "assistant", 
+        content: `${error}\n似乎有什麼地方出錯了？\n麻煩重置聊天室！`
+      }]);
     }
   }
   
